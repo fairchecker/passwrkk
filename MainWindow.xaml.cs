@@ -1,15 +1,10 @@
 ﻿using Microsoft.Win32;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using passwrkk.Model;
+
 
 namespace passwrkk;
 
@@ -101,18 +96,16 @@ public partial class MainWindow : Window
     private void CreateVault(object sender, RoutedEventArgs eventArgs)
     {
         MainGrid.Children.Remove(overlayPanel);
-        var path = GetPath();
+        var path = GetPath() + "/" + nameBox.Text + ".pswx";
         if(path != "ERROR")
         {
-            MessageBox.Show(path);
-            File.Create(@path + "/" + nameBox.Text + ".pswx");
+            Encrypter.SaveToFile(path, masterPassBox.Password, "yoboba");
         }
     }
 
     private string GetPath()
     {
         OpenFolderDialog dialog = new();
-        //dialog.Filter = "Vault (*.pswx)|*.pswx";
         if(dialog.ShowDialog() == true)
         {
             return dialog.FolderName;
@@ -129,6 +122,9 @@ public partial class MainWindow : Window
         if(dialog.ShowDialog() == true)
         {
             var path = dialog.FileName;
+            var text = Encrypter.ReadDataFromFile(path, "12348765");
         }
+
+        
     }
 }
