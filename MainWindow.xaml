@@ -24,14 +24,14 @@
                 Content="Create new vault" 
                 Margin="362,192,362,221" 
                 BorderBrush="PaleTurquoise" Background="DarkSlateGray" 
-                Click="CreateNewVault"/>
+                Click="OnCreateNewVaultButton"/>
         <Button x:Name="OpenVaultButton" 
                 Visibility="Visible" 
                 Foreground="White" 
                 Content="Open an existing vault" 
                 Margin="362,282,362,131" 
-                BorderBrush="PaleTurquoise" Background="DarkSlateGray" 
-                Click="OpenVault"/>
+                BorderBrush="PaleTurquoise" Background="DarkSlateGray"
+                />
         
     </Grid>
 </Window>
