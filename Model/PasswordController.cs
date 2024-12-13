@@ -1,7 +1,5 @@
-﻿using System;
-using System.Text.Json.Nodes;
+﻿using Newtonsoft.Json.Linq;
 using System.Windows;
-using Newtonsoft.Json.Linq;
 
 namespace passwrkk.Model
 {
@@ -15,7 +13,7 @@ namespace passwrkk.Model
                 JArray passArray = (JArray)jsonObject[name] ?? new JArray();
 
                 JObject obj = new();
-                for(int i = 0; i < objcts.Count; i++)
+                for (int i = 0; i < objcts.Count; i++)
                 {
                     obj[types[i]] = objcts[i];
                 }
@@ -27,7 +25,7 @@ namespace passwrkk.Model
                 }
                 return jsonObject.ToString(Newtonsoft.Json.Formatting.Indented);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
@@ -40,10 +38,10 @@ namespace passwrkk.Model
             JArray array = (JArray?)jsonObject[name];
 
             List<List<string>> list = new();
-            for(int j = 0; j < array.Count; j++)
+            for (int j = 0; j < array.Count; j++)
             {
                 List<string> ls = new();
-                for(int i = 0; i < types.Count; i++)
+                for (int i = 0; i < types.Count; i++)
                 {
                     ls.Add(array[j][types[i]].ToString());
 

@@ -1,7 +1,6 @@
-﻿using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
-using System.Windows;
+using System.Text;
 
 namespace passwrkk.Model;
 
@@ -19,16 +18,16 @@ internal class Encrypter
 
     public static byte[] EncryptString(string password, string plainText)
     {
-        using(Aes aes = Aes.Create())
+        using (Aes aes = Aes.Create())
         {
-            byte[] key = GetKey(password, aes.KeySize/8);
+            byte[] key = GetKey(password, aes.KeySize / 8);
             aes.Key = key;
             aes.GenerateIV();
 
-            using(MemoryStream ms = new MemoryStream())
+            using (MemoryStream ms = new MemoryStream())
             {
                 ms.Write(aes.IV, 0, aes.IV.Length);
-                using (CryptoStream cs = new(ms, aes.CreateEncryptor(), CryptoStreamMode.Write)) 
+                using (CryptoStream cs = new(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
                 using (StreamWriter sw = new StreamWriter(cs))
                 {
                     sw.Write(plainText);
@@ -50,25 +49,25 @@ internal class Encrypter
         return DecryptString(bytes, password);
     }
 
-        public static string DecryptString(byte[] cipherText, string password)
+    public static string DecryptString(byte[] cipherText, string password)
+    {
+        using (Aes aes = Aes.Create())
         {
-            using (Aes aes = Aes.Create())
+            byte[] key = GetKey(password, aes.KeySize / 8);
+            using (MemoryStream ms = new MemoryStream(cipherText))
             {
-                byte[] key = GetKey(password, aes.KeySize / 8);
-                using (MemoryStream ms = new MemoryStream(cipherText))
-                {
-                    byte[] iv = new byte[aes.BlockSize / 8];
-                    ms.Read(iv, 0, iv.Length);
-                    aes.Key = key;
-                    aes.IV = iv;
+                byte[] iv = new byte[aes.BlockSize / 8];
+                ms.Read(iv, 0, iv.Length);
+                aes.Key = key;
+                aes.IV = iv;
 
-                    using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Read))
-                    using (StreamReader sr = new StreamReader(cs))
-                    {
-                        return sr.ReadToEnd();
-                    }
+                using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                using (StreamReader sr = new StreamReader(cs))
+                {
+                    return sr.ReadToEnd();
                 }
             }
         }
     }
+}
 
