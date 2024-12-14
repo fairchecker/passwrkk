@@ -1,5 +1,4 @@
-﻿using System.DirectoryServices;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -228,6 +227,7 @@ public static class WindowsCreator
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(20, 0, 0, 0),
                 Text = item[0],
                 Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255))
             };
@@ -235,6 +235,7 @@ public static class WindowsCreator
             Button passwordButton = new()
             {
                 Content = "get password",
+                Margin = new Thickness(0, 0, 20, 0),
                 HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Center,
                 Width = 100,
@@ -250,6 +251,49 @@ public static class WindowsCreator
         }
 
         return list;
+    }
+
+    public static void OpenVaultWindow(Grid mainGrid, out PasswordBox passwordBox, out Button enterButton)
+    {
+        Grid grid = new()
+        {
+            Margin = new Thickness(0, 40, 0, 0),
+            Background = new SolidColorBrush(Color.FromArgb(255, 66, 66, 66)),
+            Width = 200,
+            Height = 250,
+        };
+
+        TextBlock textBlock = new TextBlock()
+        {
+            Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)),
+            FontSize = 16,
+            Text = "Enter the masterpass",
+            Width = 200,
+            Height = 21,
+            TextAlignment = TextAlignment.Center,
+            Margin = new Thickness(0, 80, 0, 20),
+        };
+
+        passwordBox = new()
+        {
+            Width = 150,
+            Height = 21,
+        };
+
+        enterButton = new()
+        {
+            Width = 150,
+            Height = 21,
+            VerticalAlignment = VerticalAlignment.Bottom,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Margin = new Thickness(0, 0, 0, 20),
+            Content = "Enter!"
+        };
+
+        grid.Children.Add(passwordBox);
+        grid.Children.Add(textBlock);
+        grid.Children.Add(enterButton);
+        mainGrid.Children.Add(grid);
     }
 }
 

@@ -1,9 +1,4 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace passwrkk.Model
 {
@@ -31,6 +26,18 @@ namespace passwrkk.Model
             }
 
             throw new Exception("Error occured while getting file path!");
+        }
+
+        public static string GetVaultNameByPath(string path)
+        {
+            for (int i = path.Length - 6; i >= 0; i--)
+            {
+                if (path[i] == '\\')
+                {
+                    return path.Substring(i + 1, path.Length - 6 - i);
+                }
+            }
+            return "ERROR";
         }
     }
 }

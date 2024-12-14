@@ -56,7 +56,6 @@ public partial class MainWindow : Window
 
     private void OnAddNewPasswordButton(object sender, RoutedEventArgs e)
     {
-
         Button button = new();
         var grid = WindowsCreator.CreatePasswordWindow(MainGrid, out _uPBox, out _uTBox, out button);
 
@@ -93,7 +92,12 @@ public partial class MainWindow : Window
         _stackPanel = WindowsCreator.DrawVaultWindow(MainGrid, _name, out button);
         button.Click += OnAddNewPasswordButton;
 
-        var list = PasswordController.GetAllByTypes(_passwords, _name, new List<string> { "name", "password" });
+        var list = PasswordController.GetAllByTypes
+            (
+            _passwords, 
+            _name, 
+            new List<string> { "name", "password" }
+            );
         var buttonsList = WindowsCreator.WritePasswords(list, _stackPanel);
 
         foreach( var item in buttonsList )
@@ -108,6 +112,45 @@ public partial class MainWindow : Window
         if (password != null)
         {
             MessageBox.Show(password.Password);
+            Clipboard.SetText(password.Password);
+        }
+    }
+
+    private void OnOpenVaultButton(object sender, RoutedEventArgs e)
+    {
+        _path = ModelUtils.GetFilePath("Vault (*.pswx)|*.pswx");
+        _name = ModelUtils.GetVaultNameByPath(_path);
+
+        Button button = new();
+        WindowsCreator.OpenVaultWindow(MainGrid, out _uPBox, out button);
+        button.Click += OnEndVaultOpeningButton;
+    }
+
+    private void OnEndVaultOpeningButton(object sender, RoutedEventArgs e)
+    {
+        _password = _uPBox.Password;
+        _passwords = Encrypter.ReadDataFromFile(_path, _password);
+
+        ViewUtils.HideParentElement(sender, MainGrid);
+
+        Button addNewPassButton = new();
+        _stackPanel = WindowsCreator.DrawVaultWindow(MainGrid, _name, out addNewPassButton);
+        addNewPassButton.Click += OnAddNewPasswordButton;
+
+        var list = WindowsCreator.WritePasswords
+            (
+            PasswordController.GetAllByTypes
+                (
+                _passwords, 
+                _name, 
+                new List<string> { "name", "password" }
+                ), 
+            _stackPanel
+            );
+
+        foreach(var item in list)
+        {
+            item.Click += OnGetPasswordButton;
         }
     }
 }
